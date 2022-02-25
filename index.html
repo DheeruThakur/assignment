@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dynamically Add Remove Table Rows in JavaScript</title>
+    <style>
+      * {
+        font: 17px Calibri;
+      }
+      table {
+        min-width: 100%;
+        background-color: #191d28;
+      }
+      th,
+      td {
+        color: #ffffff;
+        background-color: #212529;
+        border-collapse: collapse;
+        font-size: 24px;
+        font-weight: 500;
+      }
+      .custom-td {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+      }
+      .custom-tr {
+        height: 60px;
+      }
+    </style>
+  </head>
+  <body onload="createTable()">
+    <div id="cont"></div>
+    <!-- the container to add the TABLE -->
+  </body>
+  <script>
+    var data;
+    let srno = 1;
+    fetch("https://crypto-dhee.herokuapp.com/data")
+      .then((response) => response.json())
+      .then((data) => {
+        for (let i = 0; i < data.length; i++) {
+          addRow(data[i]);
+        }
+      });
+    var arrHead = new Array(); // array for header.
+    var myArr = new Array();
+    myArr = ["no", "name", "last", "buy", "sell", "volume", "base_unit"];
+    arrHead = [
+      "#",
+      "name",
+      "Last",
+      "Buy Price",
+      "Sell Price",
+      "volume",
+      "base_unit",
+    ];
+    function createTable() {
+      var empTable = document.createElement("table");
+      empTable.setAttribute("id", "empTable");
+      var tr = empTable.insertRow(-1);
+      for (var h = 0; h < arrHead.length; h++) {
+        var th = document.createElement("th");
+        th.innerHTML = arrHead[h];
+        tr.appendChild(th);
+      }
+      var div = document.getElementById("cont");
+      div.appendChild(empTable);
+    }
+    function addRow(data) {
+      var empTab = document.getElementById("empTable");
+      var rowCnt = empTab.rows.length;
+      var tr = empTab.insertRow(rowCnt);
+      tr = empTab.insertRow(rowCnt);
+      tr.classList.add("custom-tr");
+      myArr.map((val, index) => {
+        console.log(data);
+        var td = document.createElement("td");
+        td = tr.insertCell(index);
+        var ele = document.createElement("td");
+        ele.classList.add("custom-td");
+        if (val == "no") {
+          var cellText = document.createTextNode(srno);
+          srno = srno + 1;
+        } else {
+          var cellText = document.createTextNode(data[val]);
+        }
+        ele.appendChild(cellText);
+        td.appendChild(ele);
+      });
+    }
+  </script>
+</html>
